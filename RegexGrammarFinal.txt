@@ -1,0 +1,27 @@
+MeMySelf ::= ('Program' | 'program') id ';' DefinicionDeVariables? DefinicionDeFuncion* 'main()' '{' Estatutos? '}'
+DefinicionDeVariables ::= 'var' (tipo ':' lista_ids ';')+
+tipo ::= 'int' | 'float'| 'char'
+lista_ids ::= id ArrayDeclaration? (',' id ArrayDeclaration?)*
+ArrayDeclaration ::= ('[' cte_i ('..' cte_i)? ']')+ 
+DefinicionDeFuncion ::= tipo_retorno? 'module' id '(' Parametros? ')' DefinicionDeVariables?  '{' Estatutos? '}' 
+Parametros ::=  var_simple (',' var_simple)* 
+var_simple ::= tipo id
+Estatutos ::= Estatuto+
+Estatuto ::= Asignacion | LlamadaAVoid | RetornoDeFuncion | Lectura | Escritura | EstatutoDeDecision | Condicional_Rep | NoCondicional_Rep
+Asignacion ::= id ArrayIndexing? '=' Expresion ';' 
+LlamadaAVoid ::= id '(' ParametrosConValores? ')' ';'
+ParametrosConValores ::= (id ':')? Expresion  (',' (id ':')?  Expresion)*
+RetornoDeFuncion ::= 'return' '(' Expresion  ')' ';'
+Lectura ::= 'read' '(' id ( ',' id)* ')' ';'
+Escritura ::= 'write' '(' Expresion  (',' Expresion)* ')' ';'
+EstatutoDeDecision ::= 'if' '(' Expresion ')' 'then' '{' Estatutos? '}' ('else' '{' Estatutos? '}')?
+Condicional_Rep ::= 'while' '(' Expresion ')' 'do' '{' Estatutos? '}' ';'
+NoCondicional_Rep ::= 'from' id '=' Expresion 'to' Expresion 'do' '{' Estatutos? '}'
+ArrayIndexing ::=  ('['  Expresion  ']')+
+Expresion ::= OR_Exp ('|' OR_Exp)*
+OR_Exp ::= AND_Exp ('&' AND_Exp)*
+AND_Exp ::= EQ_Exp ( ( '==' | '!=' )   EQ_Exp)? 
+EQ_Exp ::= CMP_Exp (('>' | '>=' | '<' | '<=') CMP_Exp)?
+CMP_Exp ::= Term (('+' | '-') Term)*
+Term ::= Factor (('*' | '/') Factor)*
+Factor ::= ( '(' Expresion ')' ) | cte_i  | cte_f  | cte_c  | letrero | id  ( ( '('  ParametrosConValores?  ')' ) | ArrayIndexing )?
